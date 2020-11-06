@@ -12,27 +12,26 @@
           {{ item.product.name }}
         </option>
       </select>
-      <label for="qtyReceived">Quantity Received:</label>
+      <label for="qtyReceived" class="label-body">Quantity Received:</label>
       <input type="number" id="qtyReceived" v-model="qtyReceived" />
     </template>
 
     <template v-slot:footer>
-        <solar-button
-            type="button"
-            @button:click="save"
-            aria-label="Save New Shipment"
-        >
-            Save Received Shipment
-        </solar-button>
-        <solar-button
-            type="button"
-            @button:click="close"
-            aria-label="Close Modal"
-        >
-           Close
-        </solar-button>
+      <solar-button
+        type="button"
+        @click.native="save"
+        aria-label="Save New Shipment"
+      >
+        Save Received Shipment
+      </solar-button>
+      <solar-button
+        type="button"
+        @click.native="close"
+        aria-label="Close Modal"
+      >
+        Close
+      </solar-button>
     </template>
-
   </solar-modal>
 </template>
 
@@ -41,7 +40,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import SolarButton from '@/components/SolarButton.vue'
 import SolarModal from '@/components/modals/SolarModal.vue'
 import { IProduct, IProductInventory } from '@/interfaces/Product'
-
+import { IShipment } from '@/interfaces/Shipment'
 @Component({
   name: 'ShipmentModal',
   components: { SolarButton, SolarModal },
@@ -51,27 +50,38 @@ export default class ShipmentModal extends Vue {
   inventory!: IProductInventory[]
 
   selectedProduct: IProduct = {
-      id: 0,
-      createdOn: new Date(),
-      updatedOn: new Date(),
-      name: "Coffee",
-      description: "",
-      price: 0,
-      isTaxable: false,
-      isArchived: true
+    id: 0,
+    createdOn: new Date(),
+    updatedOn: new Date(),
+    name: 'Coffee',
+    description: '',
+    price: 0,
+    isTaxable: false,
+    isArchived: true,
   }
 
   qtyReceived: number = 0
 
   close() {
-      this.$emit('close')
+    this.$emit('close')
   }
 
   save() {
-      console.log("Save Shipment")
-      this.close()
+    let shipment: IShipment = {
+      productId: this.selectedProduct.id,
+      adjustment: this.qtyReceived,
+    }
+    this.$emit('save:shipment', shipment)
   }
 }
 </script>
 
-<style></style>
+<style lang="scss" scoped>
+.label-body {
+  margin-top: 10px;
+}
+
+input {
+  width: 98%;
+}
+</style>
