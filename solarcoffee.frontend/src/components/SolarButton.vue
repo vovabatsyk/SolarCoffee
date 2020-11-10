@@ -1,15 +1,6 @@
 <template>
   <div class="btn-link">
     <button
-      v-if="link"
-      type="button"
-      @click="visitRoute"
-      :class="['solar-button', { 'full-width': isFullWidth }]"
-    >
-      <slot></slot>
-    </button>
-    <button
-    v-else
       type="button"
       @click="onClick"
       :class="['solar-button', { 'full-width': isFullWidth }]"
@@ -28,8 +19,6 @@ import { Prop } from 'vue-property-decorator'
   name: 'SollarButton',
 })
 export default class SolarButton extends Vue {
-  @Prop({ required: false, type: String })
-  link?: string
 
   @Prop({ required: false, type: Boolean, default: false })
   isFullWidth?: boolean
@@ -38,11 +27,6 @@ export default class SolarButton extends Vue {
     this.$emit('button:click')
   }
 
-  visitRoute() {
-    if (this.link) {
-      this.$router.push(this.link).catch(() => {})
-    }
-  }
 }
 </script>
 

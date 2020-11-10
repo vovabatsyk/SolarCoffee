@@ -46,8 +46,8 @@ import { IShipment } from '@/interfaces/Shipment'
   components: { SolarButton, SolarModal },
 })
 export default class ShipmentModal extends Vue {
-  @Prop({ required: true, type: Array as () => IProductInventory[] })
-  inventory!: IProductInventory[]
+  @Prop({ required: false, type: Array as () => IProductInventory[] })
+  inventory?: IProductInventory[]
 
   selectedProduct: IProduct = {
     id: 0,

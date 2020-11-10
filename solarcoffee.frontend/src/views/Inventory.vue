@@ -51,6 +51,9 @@ import { IProduct, IProductInventory } from '@/interfaces/Product.d.ts'
 import NewProductModal from '@/components/modals/NewProductModal.vue'
 import ShipmentModal from '@/components/modals/ShipmentModal.vue'
 import { IShipment } from '@/interfaces/Shipment'
+import { InventoryService } from '@/services/inventory-service.ts'
+
+const inventoryService = new InventoryService()
 
 @Component({
   name: 'Inventory',
@@ -59,53 +62,7 @@ import { IShipment } from '@/interfaces/Shipment'
 export default class Inventory extends Vue {
   isNewProductVisible: boolean = false
   isShipmentVisible: boolean = false
-  inventory: IProductInventory[] = [
-    {
-      id: 1,
-      product: {
-        id: 1,
-        name: 'Dark Coffe',
-        description: 'Dark hot coffee',
-        price: 20,
-        isTaxable: true,
-        isArchived: false,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-      quantityOnHand: 1,
-      idealQuantity: 10,
-    },
-    {
-      id: 2,
-      product: {
-        id: 2,
-        name: 'Light Coffe',
-        description: 'Light hot coffee',
-        price: 25,
-        isTaxable: false,
-        isArchived: false,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-      quantityOnHand: 2,
-      idealQuantity: 10,
-    },
-    {
-      id: 3,
-      product: {
-        id: 3,
-        name: 'Light Small Coffe',
-        description: 'Light hot coffee',
-        price: 15,
-        isTaxable: false,
-        isArchived: false,
-        createdOn: new Date(),
-        updatedOn: new Date(),
-      },
-      quantityOnHand: 7,
-      idealQuantity: 10,
-    },
-  ]
+  inventory: IProductInventory[] = []
 
   showNewProductModal() {
     this.isNewProductVisible = true
@@ -120,12 +77,22 @@ export default class Inventory extends Vue {
     this.isNewProductVisible = false
   }
 
-  saveNewShipment(newProduct: IProduct) {
-    console.log(newProduct)
+  async saveNewShipment(shipment: IShipment) {
+    await inventoryService.updateInventoryQuantity(shipment)
+    console.log(shipment)
+    this.isShipmentVisible = false
+    await this.initialize()
   }
 
-  saveNewProduct(shipment: IShipment) {
-    console.log(shipment)
+  saveNewProduct(newProduct: IProduct) {
+    console.log(newProduct)
+  }
+  async initialize() {
+    this.inventory =  await inventoryService.getInventory()
+  }
+
+  async created() {
+    await this.initialize()
   }
 }
 </script>

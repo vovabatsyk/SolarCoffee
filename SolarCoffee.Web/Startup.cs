@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json.Serialization;
 using SolarCoffee.Data;
 using SolarCoffee.Services.Customer;
 using SolarCoffee.Services.Inventory;
@@ -14,6 +15,7 @@ namespace SolarCoffee.Web
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -23,8 +25,24 @@ namespace SolarCoffee.Web
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-            
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                    });
+            });
+            services.AddControllers().AddNewtonsoftJson(opts =>
+            {
+                opts.SerializerSettings.ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy()
+                };
+            });
+
+
+
             services.AddDbContext<SolarDbContext>(opts =>
             {
                 opts.EnableDetailedErrors();
@@ -47,6 +65,9 @@ namespace SolarCoffee.Web
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(MyAllowSpecificOrigins);
+
 
             app.UseAuthorization();
 
