@@ -13,7 +13,7 @@
         </option>
       </select>
       <label for="qtyReceived" class="label-body">Quantity Received:</label>
-      <input type="number" id="qtyReceived" v-model="qtyReceived" />
+      <input type="number" min="0" id="qtyReceived" v-model="qtyReceived" />
     </template>
 
     <template v-slot:footer>
@@ -53,7 +53,7 @@ export default class ShipmentModal extends Vue {
     id: 0,
     createdOn: new Date(),
     updatedOn: new Date(),
-    name: 'Coffee',
+    name: '',
     description: '',
     price: 0,
     isTaxable: false,
@@ -67,11 +67,13 @@ export default class ShipmentModal extends Vue {
   }
 
   save() {
-    let shipment: IShipment = {
-      productId: this.selectedProduct.id,
-      adjustment: this.qtyReceived,
+    if (this.selectedProduct.name != '') {
+      let shipment: IShipment = {
+        productId: this.selectedProduct.id,
+        adjustment: this.qtyReceived,
+      }
+      this.$emit('save:shipment', shipment)
     }
-    this.$emit('save:shipment', shipment)
   }
 }
 </script>

@@ -1,12 +1,12 @@
 <template>
   <div class="inventory-container">
-    <h1 class="inventoryTitle">Inventory Dashboard</h1>
+    <h1 class="title">Inventory Dashboard</h1>
     <hr />
-    <div class="inventory-actions">
-      <solar-button @click.native="showNewProductModal" id="addNewBtn">
+    <div class="title-actions">
+      <solar-button @button:click="showNewProductModal" id="addNewBtn">
         Add New Item
       </solar-button>
-      <solar-button @click.native="showShipmentModal" id="receiveShipmentBtn">
+      <solar-button @button:click="showShipmentModal" id="receiveShipmentBtn">
         Receive Shipment
       </solar-button>
     </div>
@@ -126,14 +126,6 @@ export default class Inventory extends Vue {
 <style lang="scss" scoped>
 @import '@/assets/scss/global.scss';
 
-.inventory-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.inventoryTitle {
-  text-align: center;
-}
 
 .green {
   font-weight: bold;

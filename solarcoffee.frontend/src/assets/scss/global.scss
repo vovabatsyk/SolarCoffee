@@ -63,3 +63,12 @@ select {
   padding: 0.2rem;
   color: #555;
 }
+
+.title {
+  text-align: center;
+}
+
+.title-actions {
+  display: flex;
+  justify-content: flex-end;
+}

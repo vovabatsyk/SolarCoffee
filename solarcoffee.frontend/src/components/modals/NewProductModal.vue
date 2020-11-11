@@ -65,9 +65,9 @@ export default class NewProductModal extends Vue {
     id: 0,
     createdOn: new Date(),
     updatedOn: new Date(),
-    name: 'Coffee',
+    name: '',
     description: '',
-    price: 10,
+    price: 0,
     isTaxable: true,
     isArchived: false,
   }
@@ -77,7 +77,9 @@ export default class NewProductModal extends Vue {
   }
 
   save() {
-    this.$emit('save:product', this.newProduct)
+    if(this.newProduct.name != "" && this.newProduct.price > 0){
+      this.$emit('save:product', this.newProduct)
+    }
   }
 }
 </script>
