@@ -14,7 +14,7 @@ Vue.filter('price', function(number:number){
 })
 
 Vue.filter('humanizeDate', function(date:Date){
-  moment.locale('en')
+  moment.locale('uk')
   return moment(date).format('LL')
 })
 
